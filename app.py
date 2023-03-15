@@ -12,7 +12,7 @@ class_names = open("labels.txt", "r").readlines()
 
 @st.cache_resource()
 def load_model():
-    res_model = tf.keras.models.load_model('Keras_Model.h5')
+    res_model = tf.keras.models.load_model('keras_model.h5')
     cnn_model = tf.keras.models.load_model('cnn.h5')
     mobilenet_model = tf.keras.models.load_model('mobilenet.h5')
     return res_model, cnn_model, mobilenet_model
