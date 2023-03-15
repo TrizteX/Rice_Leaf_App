@@ -1,0 +1,4 @@
+0 Leaf Blight
+1 Brown Spot
+2 Healthy
+3 Leaf Smut
