@@ -14,12 +14,12 @@ class_names = open("labels.txt", "r").readlines()
 def load_model():
     res_model = tf.keras.models.load_model('keras_model.h5')
     cnn_model = tf.keras.models.load_model('cnn.h5')
-    #mobilenet_model = tf.keras.models.load_model('mobilenet.h5')
-    return res_model, cnn_model
+    resnet_50_model = tf.keras.models.load_model('resnet_50.h5')
+    return res_model, cnn_model, resnet_50_model
 
 
 with st.spinner('Model is being loaded..'):
-    res_model, cnn_model = load_model()
+    res_model, cnn_model, resnet_50_model = load_model()
 
 st.write("""
          # Image Classification
@@ -31,7 +31,7 @@ file = st.file_uploader(
 st.set_option('deprecation.showfileUploaderEncoding', False)
 
 
-def upload_predict(upload_image,  res_model, cnn_model):
+def upload_predict(upload_image,  res_model, cnn_model, resnet_50_model):
 
 
     data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
@@ -50,14 +50,14 @@ def upload_predict(upload_image,  res_model, cnn_model):
 
     res_prediction = res_model.predict(data)
     cnn_prediction = cnn_model.predict(data)
-    #mobilenet_prediction = mobilenet_model.predict(data)
+    resnet_50_prediction = resnet_50_model.predict(data)
 
 
     print(res_prediction)
     print(cnn_prediction)
-    #print(mobilenet_prediction)
+    print(resnet_50_prediction)
 
-    return res_prediction, cnn_prediction
+    return res_prediction, cnn_prediction, resnet_50_prediction
 
 def class_resolver(pred):
     pred = pred.tolist()
@@ -71,7 +71,7 @@ if file is None:
 else:
     image = Image.open(file).convert("RGB")
     st.image(image)
-    res_pred_class, cnn_pred_class= upload_predict(image,  res_model, cnn_model)
+    res_pred_class, cnn_pred_class, resnet_50_pred_class = upload_predict(image,  res_model, cnn_model, resnet_50_model)
 
 
     index = np.argmax(res_pred_class)
@@ -82,16 +82,16 @@ else:
     cnn_image_class = class_resolver(cnn_pred_class[0])
 
 
-    #mobilenet_image_class = class_resolver(mobilenet_pred_class[0])
+    resnet_50_image_class = class_resolver(resnet_50_pred_class[0])
     
 
-    st.write("ResNet50 Classification", res_image_class)
+    st.write("ResNet50+NN Classification", res_image_class)
    
 
     st.write("CNN Classification", cnn_image_class)
 
 
-    #st.write("MobileNet Classification", mobilenet_image_class)
+    st.write("Resnet50 Classification", resnet_50_image_class)
 
 
 
